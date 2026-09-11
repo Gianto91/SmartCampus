@@ -1,45 +1,36 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 // Pages
-import LandingPage from '@/pages/LandingPage'
-import StudentChat from '@blocks/students/ChatWhatsAppScreen'
-import TeacherChat from '@blocks/teachers/TeacherChatScreen'
-import AdminPortal from '@blocks/admin/AdminLandingPage'
-import FAQDashboard from '@blocks/faq-manager/FAQDashboard'
-import SupportDashboard from '@blocks/ticket-center/SupportDashboard'
-import ExecutiveDashboard from '@blocks/executive-dashboard/ExecutiveDashboard'
+import PortalAyuda from '@/pages/PortalAyuda'
+import CentroAyuda from '@/pages/CentroAyuda'
+import MisTickets from '@/pages/MisTickets'
+import DashboardAdmin from '@/pages/DashboardAdmin'
+import DashboardAgente from '@/pages/DashboardAgente'
+import DashboardGerencial from '@/pages/DashboardGerencial'
 
 function App() {
   return (
     <>
       <Router>
         <Routes>
-          {/* Landing Pages */}
-          <Route path="/" element={<LandingPage />} />
+          {/* Portal Principal */}
+          <Route path="/" element={<PortalAyuda />} />
+          <Route path="/centro-ayuda" element={<CentroAyuda />} />
+          <Route path="/mis-tickets" element={<MisTickets />} />
 
-          {/* Student Block - WhatsApp */}
-          <Route path="/student/chat" element={<StudentChat />} />
+          {/* Admin */}
+          <Route path="/admin/dashboard" element={<DashboardAdmin />} />
 
-          {/* Teacher Block - WhatsApp */}
-          <Route path="/teacher/chat" element={<TeacherChat />} />
+          {/* Soporte */}
+          <Route path="/soporte/agente" element={<DashboardAgente />} />
 
-          {/* Admin Block - Portal Web */}
-          <Route path="/admin" element={<AdminPortal />} />
-          <Route path="/admin/tickets" element={<AdminPortal />} />
+          {/* Gerencia */}
+          <Route path="/gerencia/dashboard" element={<DashboardGerencial />} />
 
-          {/* FAQ Manager */}
-          <Route path="/admin/faq" element={<FAQDashboard />} />
-
-          {/* Support Center - N1/N2 */}
-          <Route path="/support/dashboard" element={<SupportDashboard />} />
-
-          {/* Executive Dashboard */}
-          <Route path="/executive/dashboard" element={<ExecutiveDashboard />} />
-
-          {/* 404 */}
-          <Route path="*" element={<div className="text-center py-16">Página no encontrada</div>} />
+          {/* Catch all */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
 
