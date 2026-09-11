@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom utilities */
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-ucin-primary text-white rounded-lg hover:bg-ucin-secondary transition-colors;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors;
+  }
+
+  .badge-status {
+    @apply px-2 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .badge-open {
+    @apply badge-status bg-blue-100 text-status-open;
+  }
+
+  .badge-review {
+    @apply badge-status bg-yellow-100 text-status-review;
+  }
+
+  .badge-escalated {
+    @apply badge-status bg-orange-100 text-status-escalated;
+  }
+
+  .badge-resolved {
+    @apply badge-status bg-green-100 text-status-resolved;
+  }
+
+  .badge-closed {
+    @apply badge-status bg-gray-100 text-status-closed;
+  }
+
+  .card {
+    @apply bg-white rounded-lg shadow-md p-6 border border-gray-100;
+  }
+
+  .card-elevated {
+    @apply card shadow-lg;
+  }
+
+  .container-page {
+    @apply w-full max-w-7xl mx-auto px-4 py-6;
+  }
+}
+
+/* Global animations */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  .container-page {
+    @apply px-2 py-4;
+  }
+}
