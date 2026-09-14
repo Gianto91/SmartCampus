@@ -1,32 +1,69 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common'
 
 @Injectable()
 export class TicketService {
-  async createTicket(dto: any) {
-    // RNS-02: Verificar que intentos_fallidos >= 1
-    if (dto.consultation.intentos_fallidos < 1) {
-      throw new BadRequestException(
-        'Debe intentar autoatención primero (RNS-02)'
-      );
-    }
+  constructor() {}
 
-    // RNS-03: Adjuntar HistorialIA inmutable
-    const ticket = {
-      id: this.generateTicketId(),
-      historialIA: dto.consultation.historialIA, // Inmutable
-      solicitante: dto.usuario,
-      canalOrigen: dto.canal,
-      descripcion: dto.descripcion,
+  // CUS03: Generar ticket de soporte
+  async crearTicket(usuarioId: string, consultaId: string, dto: any): Promise<any> {
+    // NOTE: MockDataService handles this - this is just a stub
+    const ticketId = this.generarIdTicket()
+    return {
+      id: ticketId,
       estado: 'ABIERTO',
-    };
-
-    return ticket;
+      mensaje: 'Use MockDataService',
+    }
   }
 
-  private generateTicketId(): string {
+  // Obtener historial de IA (RNS-03)
+  async obtenerHistorial(consultaId: string): Promise<any> {
+    return { bloqueado: true, mensajes: [] }
+  }
+
+  // Calcular SLA (RNS-04)
+  private calcularSLA(prioridad: string): Date {
+    const ahora = new Date()
+    const horasLaborables: { [key: string]: number } = {
+      ALTA: 8,
+      NORMAL: 24,
+      BAJA: 48,
+    }
+
+    const horas = horasLaborables[prioridad] || 24
+    const vencimiento = new Date(ahora.getTime() + horas * 60 * 60 * 1000)
+    return vencimiento
+  }
+
+  // Generar ID único
+  private generarIdTicket(): string {
     const num = Math.floor(Math.random() * 10000)
       .toString()
-      .padStart(4, '0');
-    return `#TK-${num}`;
+      .padStart(4, '0')
+    return `#TK-${num}`
+  }
+
+  // CUS06: Obtener ticket por ID
+  async obtenerTicketPorId(ticketId: string): Promise<any> {
+    return { id: ticketId, estado: 'ABIERTO' }
+  }
+
+  // CUS06: Listar tickets del usuario
+  async listarTicketsUsuario(usuarioId: string): Promise<any[]> {
+    return []
+  }
+
+  // CUS06: Cambiar estado de ticket (RNS-05: Disparar notificación)
+  async cambiarEstadoTicket(
+    ticketId: string,
+    nuevoEstado: string,
+    diagnostico?: string,
+    solucion?: string
+  ): Promise<any> {
+    return {
+      id: ticketId,
+      estado: nuevoEstado,
+      mensaje: `Ticket actualizado a estado: ${nuevoEstado}`,
+      dispararNotificacion: true,
+    }
   }
 }

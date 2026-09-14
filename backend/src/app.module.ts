@@ -24,6 +24,10 @@ import { DatabaseConfig } from '@config/database.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
+// Controllers & Services
+import { TicketApiController } from '@modules/tickets/ticket-api.controller';
+import { MockDataService } from '@modules/tickets/mock-data.service';
+
 @Module({
   imports: [
     // Configuration
@@ -47,7 +51,7 @@ import { AppService } from './app.service';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET') || 'dev-secret-key',
         signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRATION') || '7d',
+          expiresIn: 604800, // 7 days in seconds
         },
       }),
     }),
@@ -67,7 +71,7 @@ import { AppService } from './app.service';
     WhatsAppModule,
     PortalWebModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, TicketApiController],
+  providers: [AppService, MockDataService],
 })
 export class AppModule {}

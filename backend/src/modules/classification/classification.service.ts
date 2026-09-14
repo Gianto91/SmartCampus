@@ -37,7 +37,7 @@ export class ClassificationService {
 
   private getSLAHours(priority: string): number {
     // RNS-04: Acuerdos de Nivel de Servicio
-    const slaMap = {
+    const slaMap: { [key: string]: number } = {
       'ALTA': 8,
       'NORMAL': 24,
       'BAJA': 48,

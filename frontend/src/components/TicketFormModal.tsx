@@ -1,12 +1,16 @@
-import { useState } from 'react'
-import { X, Upload, CheckCircle } from 'lucide-react'
+import { useState, useContext } from 'react'
+import { X, Upload, CheckCircle, Loader } from 'lucide-react'
+import { AppContext } from '@/context/AppContext'
 
 interface TicketFormModalProps {
   onClose: () => void
 }
 
 export default function TicketFormModal({ onClose }: TicketFormModalProps) {
+  const context = useContext(AppContext)
   const [step, setStep] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const [ticketId, setTicketId] = useState('')
   const [formData, setFormData] = useState({
     clasificacion: 'RRHH / Marcaciones',
     motivo: 'Marcación no visible',
@@ -16,9 +20,37 @@ export default function TicketFormModal({ onClose }: TicketFormModalProps) {
     archivo: null,
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setStep(2)
+    setLoading(true)
+
+    try {
+      // Generar ID único
+      const newId = `#TK-${Math.floor(Math.random() * 10000)
+        .toString()
+        .padStart(4, '0')}`
+
+      setTicketId(newId)
+
+      // Agregar ticket al contexto
+      if (context) {
+        context.addTicket({
+          id: newId,
+          asunto: formData.motivo,
+          estado: 'ABIERTO',
+          fecha: new Date().toLocaleDateString('es-ES'),
+          prioridad: 'NORMAL',
+          categoria: formData.clasificacion,
+        })
+      }
+
+      setStep(2)
+    } catch (error) {
+      console.error('Error creando ticket:', error)
+      alert('Error al crear el ticket')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -140,8 +172,10 @@ export default function TicketFormModal({ onClose }: TicketFormModalProps) {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition font-semibold"
+                  disabled={loading}
+                  className="flex-1 px-6 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white rounded-lg transition font-semibold flex items-center justify-center gap-2"
                 >
+                  {loading ? <Loader className="w-4 h-4 animate-spin" /> : ''}
                   Enviar Ticket
                 </button>
               </div>
@@ -158,7 +192,7 @@ export default function TicketFormModal({ onClose }: TicketFormModalProps) {
               <p className="text-gray-600 mb-6">Tu solicitud ha sido recibida y asignada al equipo de soporte</p>
 
               <div className="bg-purple-100 rounded-lg p-4 mb-8">
-                <p className="text-purple-600 font-bold text-2xl">#TK-8022</p>
+                <p className="text-purple-600 font-bold text-2xl">{ticketId}</p>
               </div>
 
               <p className="text-gray-600 mb-8">

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Send, X, Upload } from 'lucide-react'
+import { Send } from 'lucide-react'
 import TicketFormModal from '@/components/TicketFormModal'
 
 interface Message {
@@ -9,6 +9,13 @@ interface Message {
   text: string
   timestamp: Date
 }
+
+const FAQ_DATA = [
+  { keywords: ['pago', 'matrícula', 'boleta'], answer: 'Para descargar tu boleta: 1. Ingresa al Portal Académico, 2. Ve a Pagos, 3. Selecciona el período, 4. Descarga el PDF.' },
+  { keywords: ['contraseña', 'seguridad', 'acceso'], answer: 'Para cambiar tu contraseña: 1. Ingresa a Mi Cuenta, 2. Haz clic en Seguridad, 3. Selecciona Cambiar Contraseña, 4. Ingresa contraseña actual y nueva.' },
+  { keywords: ['marcación', 'omitida', 'falta'], answer: 'Para regularizar una marcación omitida: 1. Ingresa al módulo "Solicitudes Omitidas", 2. Selecciona la fecha con incidencia, 3. Adjunta justificación, 4. Envía dentro de 48 horas.' },
+  { keywords: ['certificado', 'egreso'], answer: 'Para solicitar un certificado de egreso: 1. Accede al Portal, 2. Ve a Documentos, 3. Selecciona Certificados, 4. Solicita el que necesites, 5. Espera 24 horas.' },
+]
 
 export default function CentroAyuda() {
   const [messages, setMessages] = useState<Message[]>([
@@ -22,6 +29,16 @@ export default function CentroAyuda() {
   const [input, setInput] = useState('')
   const [showTicketForm, setShowTicketForm] = useState(false)
 
+  const searchFAQ = (query: string): string | null => {
+    const queryLower = query.toLowerCase()
+    for (const item of FAQ_DATA) {
+      if (item.keywords.some((kw) => queryLower.includes(kw))) {
+        return item.answer
+      }
+    }
+    return null
+  }
+
   const handleSend = () => {
     if (!input.trim()) return
 
@@ -33,18 +50,20 @@ export default function CentroAyuda() {
     }
 
     setMessages([...messages, userMessage])
+    const userQuery = input
     setInput('')
 
-    // Simular respuesta del bot
+    // Simular respuesta del bot con delay
     setTimeout(() => {
+      const faqAnswer = searchFAQ(userQuery)
       const botMessage: Message = {
         id: messages.length + 2,
         sender: 'bot',
-        text: 'He detectado que tu consulta requiere intervención del equipo de soporte técnico. Para continuar, por favor abre un ticket de soporte.',
+        text: faqAnswer || 'He detectado que tu consulta requiere intervención del equipo de soporte técnico. Para continuar, por favor abre un ticket de soporte.',
         timestamp: new Date(),
       }
       setMessages((prev) => [...prev, botMessage])
-    }, 1000)
+    }, 600)
   }
 
   return (
@@ -88,14 +107,16 @@ export default function CentroAyuda() {
             ))}
 
             {/* Bot Button to Open Ticket Form */}
-            <div className="flex justify-start mt-6">
-              <button
-                onClick={() => setShowTicketForm(true)}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
-              >
-                📋 Abrir Formulario de Ticket
-              </button>
-            </div>
+            {messages.length > 1 && (
+              <div className="flex justify-start mt-6">
+                <button
+                  onClick={() => setShowTicketForm(true)}
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
+                >
+                  📋 Abrir Formulario de Ticket
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Chat Input */}

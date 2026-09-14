@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Search, HelpCircle, BookOpen, Users, Zap, LogIn } from 'lucide-react'
 
 const categories = [
@@ -50,6 +50,7 @@ const services = [
 ]
 
 export default function PortalAyuda() {
+  const navigate = useNavigate()
   const [activeCategory, setActiveCategory] = useState('todos')
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -64,10 +65,21 @@ export default function PortalAyuda() {
             </div>
             <h1 className="text-xl font-bold text-gray-900">Portal de Ayuda SmartCampus</h1>
           </div>
-          <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
-            <LogIn className="w-4 h-4" />
-            Iniciar sesión con Google
-          </button>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/mis-tickets"
+              className="bg-gray-200 hover:bg-gray-300 text-gray-900 px-4 py-2 rounded-lg flex items-center gap-2 transition font-semibold"
+            >
+              📋 Mis Tickets
+            </Link>
+            <button
+              onClick={() => navigate('/login')}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition font-semibold"
+            >
+              <LogIn className="w-4 h-4" />
+              Iniciar sesión
+            </button>
+          </div>
         </div>
       </header>
 

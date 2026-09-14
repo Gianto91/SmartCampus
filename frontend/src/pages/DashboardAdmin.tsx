@@ -1,3 +1,7 @@
+import { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { LogOut } from 'lucide-react'
+import { AuthContext } from '@/context/AuthContext'
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 
 const consultasData = [
@@ -21,19 +25,51 @@ const horasData = [
 const COLORS = ['#8b5cf6', '#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#f59e0b']
 
 export default function DashboardAdmin() {
+  const navigate = useNavigate()
+  const context = useContext(AuthContext)
+
+  const handleLogout = () => {
+    context?.logout()
+    navigate('/login')
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard Administrador de IA</h1>
-            <p className="text-gray-600">Septiembre 2026 — SmartCampus UCIN</p>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header with Auth */}
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-purple-600 rounded flex items-center justify-center text-white font-bold">
+              UC|N
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-gray-900">Dashboard Admin</h1>
+              <p className="text-xs text-gray-600">SmartCampus UCIN</p>
+            </div>
           </div>
-          <div className="bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold">
-            🤖 IA Activa
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <p className="text-sm font-semibold text-gray-900">{context?.user?.nombre}</p>
+              <p className="text-xs text-gray-600">{context?.user?.email}</p>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition text-sm font-semibold"
+            >
+              <LogOut className="w-4 h-4" />
+              Cerrar
+            </button>
           </div>
         </div>
+      </header>
+
+      <div className="p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Section Header */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-900">Panel de Control</h2>
+            <p className="text-gray-600">Septiembre 2026 — Métricas y Análisis</p>
+          </div>
 
         {/* KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -130,6 +166,7 @@ export default function DashboardAdmin() {
               </tr>
             </tbody>
           </table>
+        </div>
         </div>
       </div>
     </div>
