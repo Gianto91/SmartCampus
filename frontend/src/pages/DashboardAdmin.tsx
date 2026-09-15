@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { LogOut, Ticket } from 'lucide-react'
+import { LogOut, Ticket, TrendingUp, AlertCircle, Clock, CheckCircle } from 'lucide-react'
 import { AuthContext } from '@/context/AuthContext'
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 
@@ -80,94 +80,126 @@ export default function DashboardAdmin() {
 
         {/* KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow border-l-4 border-purple-600">
-            <p className="text-gray-600 text-sm">% Autoatención IA</p>
+          <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg shadow-sm border border-purple-200 hover:shadow-md transition">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-gray-600 text-sm font-semibold">IA Autoatención</p>
+              <TrendingUp className="w-5 h-5 text-purple-600" />
+            </div>
             <p className="text-4xl font-bold text-purple-600">78.4%</p>
-            <p className="text-sm text-green-600 mt-2">↑ 2.3% vs mes anterior</p>
+            <p className="text-sm text-green-600 mt-2 font-semibold">↑ 2.3% vs anterior</p>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow border-l-4 border-blue-600">
-            <p className="text-gray-600 text-sm">Consultas Totales</p>
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg shadow-sm border border-blue-200 hover:shadow-md transition">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-gray-600 text-sm font-semibold">Consultas</p>
+              <Clock className="w-5 h-5 text-blue-600" />
+            </div>
             <p className="text-4xl font-bold text-blue-600">14,290</p>
             <p className="text-sm text-gray-600 mt-2">Septiembre 2026</p>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow border-l-4 border-red-600">
-            <p className="text-gray-600 text-sm">Tickets Generados</p>
-            <p className="text-4xl font-bold text-red-600">3,141</p>
-            <p className="text-sm text-gray-600 mt-2">31.9% escalan a humano</p>
+          <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-lg shadow-sm border border-orange-200 hover:shadow-md transition">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-gray-600 text-sm font-semibold">Tickets</p>
+              <AlertCircle className="w-5 h-5 text-orange-600" />
+            </div>
+            <p className="text-4xl font-bold text-orange-600">3,141</p>
+            <p className="text-sm text-gray-600 mt-2">31.9% escalados</p>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow border-l-4 border-yellow-600">
-            <p className="text-gray-600 text-sm">CSAT Promedio</p>
-            <p className="text-4xl font-bold text-yellow-600">4.6 ★</p>
-            <p className="text-sm text-gray-600 mt-2">sobre 5.0</p>
+          <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg shadow-sm border border-green-200 hover:shadow-md transition">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-gray-600 text-sm font-semibold">Satisfacción</p>
+              <CheckCircle className="w-5 h-5 text-green-600" />
+            </div>
+            <p className="text-4xl font-bold text-green-600">4.6/5.0</p>
+            <p className="text-sm text-gray-600 mt-2">CSAT Promedio</p>
           </div>
         </div>
 
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Tendencia de Consultas */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Tendencia de Consultas</h3>
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-gray-900">📈 Tendencia de Consultas</h3>
+              <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-semibold">Últimos 4 meses</span>
+            </div>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={consultasData}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip />
+                <Tooltip
+                  contentStyle={{ backgroundColor: '#f3f4f6', border: '1px solid #d1d5db' }}
+                  cursor={{ fill: 'rgba(139, 92, 246, 0.1)' }}
+                />
                 <Legend />
-                <Line type="monotone" dataKey="consultas" stroke="#8b5cf6" strokeWidth={2} />
-                <Line type="monotone" dataKey="resueltos" stroke="#10b981" strokeWidth={2} />
+                <Line type="monotone" dataKey="consultas" stroke="#8b5cf6" strokeWidth={2} dot={{ fill: '#8b5cf6', r: 4 }} />
+                <Line type="monotone" dataKey="resueltos" stroke="#10b981" strokeWidth={2} dot={{ fill: '#10b981', r: 4 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
 
           {/* Distribución por Hora */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Distribución por Hora del Día</h3>
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-gray-900">🕐 Distribución Horaria</h3>
+              <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-semibold">Hoy</span>
+            </div>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={horasData}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#8b5cf6" />
+                <Tooltip
+                  contentStyle={{ backgroundColor: '#f3f4f6', border: '1px solid #d1d5db' }}
+                  cursor={{ fill: 'rgba(139, 92, 246, 0.1)' }}
+                />
+                <Bar dataKey="value" fill="#8b5cf6" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Brechas de Conocimiento */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-bold text-gray-900">Brechas de Conocimiento</h3>
-            <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
-              + Crear FAQ Nuevo
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h3 className="text-lg font-bold text-gray-900">📚 Brechas de Conocimiento</h3>
+              <p className="text-sm text-gray-600 mt-1">Temas detectados sin respuesta en FAQ</p>
+            </div>
+            <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+              + Crear FAQ
             </button>
           </div>
 
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left px-4 py-3 font-semibold text-gray-700">Tema detectado</th>
-                <th className="text-left px-4 py-3 font-semibold text-gray-700">Frecuencia</th>
-                <th className="text-left px-4 py-3 font-semibold text-gray-700">Cobertura IA</th>
-                <th className="text-left px-4 py-3 font-semibold text-gray-700">Acción</th>
+              <tr className="bg-gray-50 border-b border-gray-200">
+                <th className="text-left px-6 py-3 font-semibold text-gray-700">Tema Detectado</th>
+                <th className="text-left px-6 py-3 font-semibold text-gray-700">Frecuencia</th>
+                <th className="text-left px-6 py-3 font-semibold text-gray-700">Cobertura FAQ</th>
+                <th className="text-left px-6 py-3 font-semibold text-gray-700">Acción</th>
               </tr>
             </thead>
-            <tbody>
-              <tr className="border-b border-gray-200 hover:bg-gray-50">
-                <td className="px-4 py-3">Problemas Sincronización RH</td>
-                <td className="px-4 py-3 font-bold">342 consultas</td>
-                <td className="px-4 py-3">
-                  <div className="w-24 bg-gray-200 rounded-full h-2">
-                    <div className="bg-red-500 h-2 rounded-full" style={{ width: '12%' }}></div>
+            <tbody className="divide-y divide-gray-200">
+              <tr className="hover:bg-gray-50 transition">
+                <td className="px-6 py-4 font-medium text-gray-900">🔄 Sincronización RH</td>
+                <td className="px-6 py-4">
+                  <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold">342 consultas</span>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-32 bg-gray-200 rounded-full h-2">
+                      <div className="bg-red-500 h-2 rounded-full" style={{ width: '12%' }}></div>
+                    </div>
+                    <span className="text-sm text-gray-600">12%</span>
                   </div>
                 </td>
-                <td className="px-4 py-3">
-                  <button className="bg-purple-600 text-white px-3 py-1 rounded text-sm font-semibold">
-                    Entrenar IA / Crear FAQ
+                <td className="px-6 py-4">
+                  <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                    Crear FAQ
                   </button>
                 </td>
               </tr>
