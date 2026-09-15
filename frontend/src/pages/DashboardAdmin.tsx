@@ -1,8 +1,9 @@
-import { useContext } from 'react'
+import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LogOut, Ticket, TrendingUp, AlertCircle, Clock, CheckCircle } from 'lucide-react'
 import { AuthContext } from '@/context/AuthContext'
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import CreateFAQModal from '@/components/CreateFAQModal'
 
 const consultasData = [
   { name: 'Jun', consultas: 8000, resueltos: 7000 },
@@ -27,10 +28,17 @@ const COLORS = ['#8b5cf6', '#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#f59e0b'
 export default function DashboardAdmin() {
   const navigate = useNavigate()
   const context = useContext(AuthContext)
+  const [showFAQModal, setShowFAQModal] = useState(false)
 
   const handleLogout = () => {
     context?.logout()
     navigate('/login')
+  }
+
+  const handleCreateFAQ = (faq: any) => {
+    console.log('FAQ creado:', faq)
+    // Aquí iría la lógica para guardar el FAQ
+    alert(`✅ FAQ creado: "${faq.titulo}"\n\nLa IA ha sido entrenada con esta información.`)
   }
 
   return (
@@ -169,7 +177,10 @@ export default function DashboardAdmin() {
               <h3 className="text-lg font-bold text-gray-900">📚 Brechas de Conocimiento</h3>
               <p className="text-sm text-gray-600 mt-1">Temas detectados sin respuesta en FAQ</p>
             </div>
-            <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+            <button
+              onClick={() => setShowFAQModal(true)}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2"
+            >
               + Crear FAQ
             </button>
           </div>
@@ -208,6 +219,13 @@ export default function DashboardAdmin() {
         </div>
         </div>
       </div>
+
+      {/* FAQ Modal */}
+      <CreateFAQModal
+        isOpen={showFAQModal}
+        onClose={() => setShowFAQModal(false)}
+        onCreateFAQ={handleCreateFAQ}
+      />
     </div>
   )
 }
