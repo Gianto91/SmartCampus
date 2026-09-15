@@ -3,6 +3,7 @@ import { ValidationPipe, BadRequestException } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { existsSync } from 'fs';
 import cors from 'cors';
 import { AppModule } from './app.module';
 
@@ -11,21 +12,31 @@ async function bootstrap() {
 
   // Servir frontend compilado como archivos estáticos
   const frontendPath = join(__dirname, '../../frontend/dist');
-  app.useStaticAssets(frontendPath, {
-    prefix: '/',
-    maxAge: '1d',
-    etag: false,
-  });
 
-  // SPA fallback - redirigir rutas desconocidas a index.html
-  app.use((req, res, next) => {
-    // Si no es una ruta de API y no es un archivo estático, servir index.html
-    if (!req.path.startsWith('/api') && !req.path.includes('.')) {
-      res.sendFile(join(frontendPath, 'index.html'));
-    } else {
-      next();
-    }
-  });
+  if (existsSync(frontendPath)) {
+    console.log(`📂 Frontend encontrado en: ${frontendPath}`);
+    app.useStaticAssets(frontendPath, {
+      prefix: '/',
+      maxAge: '1d',
+      etag: false,
+    });
+
+    // SPA fallback - redirigir rutas desconocidas a index.html
+    app.use((req, res, next) => {
+      if (!req.path.startsWith('/api') && !req.path.includes('.')) {
+        const indexPath = join(frontendPath, 'index.html');
+        if (existsSync(indexPath)) {
+          res.sendFile(indexPath);
+        } else {
+          next();
+        }
+      } else {
+        next();
+      }
+    });
+  } else {
+    console.warn(`⚠️ Frontend no encontrado en ${frontendPath}`);
+  }
 
   // CORS Configuration
   app.use(cors({
