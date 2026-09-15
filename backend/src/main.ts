@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { existsSync } from 'fs';
+import { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import { AppModule } from './app.module';
 
@@ -22,7 +23,7 @@ async function bootstrap() {
     });
 
     // SPA fallback - redirigir rutas desconocidas a index.html
-    app.use((req, res, next) => {
+    app.use((req: Request, res: Response, next: NextFunction) => {
       if (!req.path.startsWith('/api') && !req.path.includes('.')) {
         const indexPath = join(frontendPath, 'index.html');
         if (existsSync(indexPath)) {
