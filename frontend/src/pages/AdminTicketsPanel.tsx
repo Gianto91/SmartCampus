@@ -2,6 +2,7 @@ import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Search, Filter, Plus, Eye, Clock, AlertCircle } from 'lucide-react'
 import { AppContext } from '@/context/AppContext'
+import SLAIndicator from '@/components/SLAIndicator'
 
 interface Ticket {
   id: string
@@ -11,6 +12,7 @@ interface Ticket {
   prioridad: 'ALTA' | 'NORMAL' | 'BAJA'
   categoria: string
   notaEspecialista?: string
+  slaVencimiento?: string
 }
 
 const getStatusColor = (estado: string) => {
@@ -172,7 +174,7 @@ export default function AdminTicketsPanel() {
                   <th className="text-left px-6 py-3 font-semibold text-gray-700">Categoría</th>
                   <th className="text-left px-6 py-3 font-semibold text-gray-700">Prioridad</th>
                   <th className="text-left px-6 py-3 font-semibold text-gray-700">Estado</th>
-                  <th className="text-left px-6 py-3 font-semibold text-gray-700">Fecha</th>
+                  <th className="text-left px-6 py-3 font-semibold text-gray-700">SLA</th>
                   <th className="text-left px-6 py-3 font-semibold text-gray-700">Acción</th>
                 </tr>
               </thead>
@@ -198,7 +200,9 @@ export default function AdminTicketsPanel() {
                           {statusColor.label}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-gray-600 text-sm">{ticket.fecha}</td>
+                      <td className="px-6 py-4">
+                        <SLAIndicator slaVencimiento={ticket.slaVencimiento} estado={ticket.estado} compact />
+                      </td>
                       <td className="px-6 py-4">
                         <button
                           onClick={() => setSelectedTicket(ticket)}
@@ -237,6 +241,11 @@ export default function AdminTicketsPanel() {
 
             {/* Content */}
             <div className="p-6 space-y-6">
+              {/* SLA Alert */}
+              <div>
+                <SLAIndicator slaVencimiento={selectedTicket.slaVencimiento} estado={selectedTicket.estado} />
+              </div>
+
               {/* Información */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 p-4 rounded-lg">

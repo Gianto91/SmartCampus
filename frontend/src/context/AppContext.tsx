@@ -9,6 +9,7 @@ interface Ticket {
   categoria: string
   nota?: string
   notaEspecialista?: string
+  slaVencimiento?: string
 }
 
 interface AppContextType {
@@ -20,6 +21,13 @@ interface AppContextType {
 
 export const AppContext = createContext<AppContextType | undefined>(undefined)
 
+const calcularSLA = (prioridad: string): string => {
+  const ahora = new Date()
+  const horasAgregadas = prioridad === 'ALTA' ? 8 : prioridad === 'NORMAL' ? 24 : 48
+  ahora.setHours(ahora.getHours() + horasAgregadas)
+  return ahora.toISOString()
+}
+
 const INITIAL_TICKETS: Ticket[] = [
   {
     id: '#TK-8022',
@@ -28,6 +36,7 @@ const INITIAL_TICKETS: Ticket[] = [
     fecha: '10/09/2026',
     prioridad: 'ALTA',
     categoria: 'RRHH / Marcaciones',
+    slaVencimiento: calcularSLA('ALTA'),
   },
   {
     id: '#TK-7901',
@@ -36,6 +45,7 @@ const INITIAL_TICKETS: Ticket[] = [
     fecha: '08/09/2026',
     prioridad: 'NORMAL',
     categoria: 'Pagos / Matrícula',
+    slaVencimiento: calcularSLA('NORMAL'),
   },
   {
     id: '#TK-7850',
@@ -44,6 +54,7 @@ const INITIAL_TICKETS: Ticket[] = [
     fecha: '05/09/2026',
     prioridad: 'NORMAL',
     categoria: 'Cuentas y Accesos',
+    slaVencimiento: calcularSLA('NORMAL'),
   },
 ]
 
