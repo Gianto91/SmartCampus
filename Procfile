@@ -1,1 +1,1 @@
-web: cd backend && npm install --legacy-peer-deps && npm run start
+web: npm install --legacy-peer-deps && npm start

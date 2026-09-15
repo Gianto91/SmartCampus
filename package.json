@@ -1,0 +1,22 @@
+{
+  "name": "smartcampus-omnidesk",
+  "version": "1.0.0",
+  "description": "SmartCampus OmniDesk - Omnichannel Incident Management System",
+  "main": "backend/src/main.ts",
+  "scripts": {
+    "install:all": "cd backend && npm install --legacy-peer-deps && cd ../frontend && npm install --legacy-peer-deps && cd ..",
+    "build": "cd frontend && npm run build && cd ..",
+    "start": "cd backend && npm run start",
+    "dev": "concurrently \"cd backend && npm run start:dev\" \"cd frontend && npm run dev\"",
+    "build:prod": "npm run install:all && npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": "18.x"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
