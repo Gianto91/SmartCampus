@@ -11,7 +11,21 @@ async function bootstrap() {
 
   // Servir frontend compilado como archivos estáticos
   const frontendPath = join(__dirname, '../../frontend/dist');
-  app.useStaticAssets(frontendPath, { prefix: '/' });
+  app.useStaticAssets(frontendPath, {
+    prefix: '/',
+    maxAge: '1d',
+    etag: false,
+  });
+
+  // SPA fallback - redirigir rutas desconocidas a index.html
+  app.use((req, res, next) => {
+    // Si no es una ruta de API y no es un archivo estático, servir index.html
+    if (!req.path.startsWith('/api') && !req.path.includes('.')) {
+      res.sendFile(join(frontendPath, 'index.html'));
+    } else {
+      next();
+    }
+  });
 
   // CORS Configuration
   app.use(cors({
