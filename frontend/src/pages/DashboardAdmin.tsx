@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { LogOut } from 'lucide-react'
+import { LogOut, Ticket } from 'lucide-react'
 import { AuthContext } from '@/context/AuthContext'
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 
@@ -48,6 +48,13 @@ export default function DashboardAdmin() {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate('/admin/tickets')}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition text-sm font-semibold"
+            >
+              <Ticket className="w-4 h-4" />
+              Panel de Tickets
+            </button>
             <div className="text-right">
               <p className="text-sm font-semibold text-gray-900">{context?.user?.nombre}</p>
               <p className="text-xs text-gray-600">{context?.user?.email}</p>

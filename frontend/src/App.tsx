@@ -13,6 +13,7 @@ import Login from '@/pages/Login'
 import GoogleLogin from '@/pages/GoogleLogin'
 import EmailLogin from '@/pages/EmailLogin'
 import DashboardAdmin from '@/pages/DashboardAdmin'
+import AdminTicketsPanel from '@/pages/AdminTicketsPanel'
 import DashboardAgente from '@/pages/DashboardAgente'
 import DashboardGerencial from '@/pages/DashboardGerencial'
 
@@ -45,6 +46,14 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <DashboardAdmin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/tickets"
+          element={
+            <ProtectedRoute>
+              <AdminTicketsPanel />
             </ProtectedRoute>
           }
         />
