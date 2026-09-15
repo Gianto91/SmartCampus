@@ -5,10 +5,9 @@
   "main": "backend/src/main.ts",
   "scripts": {
     "install:all": "cd backend && npm install --legacy-peer-deps && cd ../frontend && npm install --legacy-peer-deps && cd ..",
-    "build": "cd frontend && npm run build && cd ..",
+    "build": "npm run install:all && cd frontend && npm run build && cd ..",
     "start": "cd backend && npm run start",
-    "dev": "concurrently \"cd backend && npm run start:dev\" \"cd frontend && npm run dev\"",
-    "build:prod": "npm run install:all && npm run build"
+    "dev": "concurrently \"cd backend && npm run start:dev\" \"cd frontend && npm run dev\""
   },
   "keywords": [],
   "author": "",
